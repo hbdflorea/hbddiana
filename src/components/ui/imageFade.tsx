@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { FaTimes, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import BlurFade from "@/components/magicui/blur-fade";
+import LoadingSpinner from "./loadingSpinner";
 
 const images = Array.from({ length: 19 }, (_, i) => `/images/${i + 1}.jpeg`);
 
@@ -11,6 +12,24 @@ export function BlurFadeDemo() {
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(
     null
   );
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const preloadImages = async () => {
+      const promises = images.map((src) => {
+        return new Promise<void>((resolve) => {
+          const img = new window.Image();
+          img.src = src;
+          img.onload = () => resolve();
+        });
+      });
+
+      await Promise.all(promises);
+      setLoading(false);
+    };
+
+    preloadImages();
+  }, []);
 
   const openLightbox = (index: number) => {
     setSelectedImageIndex(index);
@@ -35,6 +54,10 @@ export function BlurFadeDemo() {
       return prevIndex === 0 ? images.length - 1 : prevIndex - 1;
     });
   };
+
+  if (loading) {
+    return <LoadingSpinner />; // Show loading spinner while images are loading
+  }
 
   return (
     <section id="photos" className="h-full w-full overflow-auto">

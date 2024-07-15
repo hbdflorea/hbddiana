@@ -69,7 +69,7 @@ export const DianasBirthdayGreeting = () => {
             <div className="text-center mb-auto flex-grow flex items-center justify-center">
               <TypingAnimation
                 className="text-2xl italic text-black dark:text-white bg-transparent"
-                text="One last effort from the Old Man :) Hope you enjoy this show!"
+                text="One last effort from an Old Man :) Hope you enjoy this greeting!"
               />
             </div>
             <RippleComponent onClick={handleRippleClick} />
